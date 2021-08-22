@@ -1,0 +1,90 @@
+setwd("C:/LABTESI")
+getwd()
+
+#Installing and recalling the vegan package
+install.packages("vegan")
+library(vegan) #also use require()
+
+
+#read.csv is a function call, which reads the data in as a data frame, and assign the data frame to a variable (using <-) so that it is stored in R’s memory
+abund <- as.data.frame(read.csv("Israel_rocky.csv"))
+abund <- as.data.frame(read.csv("Crete2018.csv"))
+
+#ncol returns the number of columns in the dataset. We need to specify the dataset in ()
+sample_no_tot <- ncol(abund)-1
+
+#to see the two variables we have created
+ls()
+
+#[] are used to extract elements from a vector.
+#in this case we are extracting from the vector "abund" from column 2 to the last one 
+abund_MDS <- abund[,2:ncol(abund)]
+abund_MDS <- t(abund_MDS) #t is a function that transposes a matrix = flips the matrix over its diagonal. VEGAN WORKS WITH ROWS AND NOT COLUMNS
+
+#decostand = provides standardization methods for community ecologists
+#method = "total" means that Each value in a row is divided by the total for the row;used for sites that have very high abundances. 
+#na.rm = TRUE lets R skip over every NA value present (NA = non present)
+abund.st <- decostand(abund_MDS, "total", MARGIN=1, na.rm=TRUE)
+
+#square root transformation
+abund.tr <- sqrt(abund.st)
+
+###### nMDS plot Israel ######
+#autotransform = use simple heuristics for possible data transformation of typical community data. If you do not have community data, you should probably set autotransform = FALSE
+sol <- metaMDS(abund.tr, autotransform=FALSE) #ATTENTION: metaMDS wants samples by rows!!
+plot(sol)
+
+#Plotting the data! Type = visualization of the points (p = points); xlim = sets the values for the x axis; main = sets the title of the plot
+plot(sol, type="p", xlim=c(-1, 1), ylim=c(-1, 1), main="Israel") 
+
+#points = function to draw points at the specified coordinates.
+#The $ allows you extract elements by name from a named list. In this case we extract the points from row 1 to row 4
+#pch = type of symbol used for the points
+#col = colour of the points
+points(sol$points[c(1:4),], pch=16, col="black") #spring, dead
+points(sol$points[c(5:8),], pch=15, col="black") #autumn, dead
+points(sol$points[9:12,], pch=1, col="blue") #spring, living, Ash
+points(sol$points[13:16,], pch=16, col="blue") #autumn, living, Ahk
+
+#quotes its argument except that terms wrapped in .()
+#round, rounds the values in its first argument to the specified number of decimal places (default 0).
+
+stress <- bquote(Stress == .(round(sol$stress, digits=2)))
+#showing on the scatterplot the calculated value of stress
+text(1, 1, stress, cex=0.8) #not tested!
+#Adding a legend in the scatterplot with the stated elements
+legend(-1, 1, c("DA","LA Ashqelon", "LA Ahkziv"), pch=c(16,1,16), col=c("black", "blue", "blue"), cex=0.8, bty="n", y.intersp = 0.75)
+
+
+###### nMDS plot Crete ######
+sol <- metaMDS(abund.tr, autotransform=FALSE) #ATTENTION: metaMDS wants samples by rows!!
+plot(sol)
+plot(sol, type="p", xlim=c(-1, 1), ylim=c(-1, 1), main="Crete") 
+
+points(sol$points[c(1:4),], pch=16, col="black") #spring, dead
+points(sol$points[c(5:8),], pch=15, col="black") #autumn, dead
+
+points(sol$points[9:12,], pch=16, col="blue") #spring, living, Ash
+points(sol$points[13:16,], pch=15, col="blue") #autumn, living, Ahk
+
+stress <- bquote(Stress == .(round(sol$stress, digits=2))) #not tested!
+text(1, 1, stress, cex=0.8) #not tested!
+legend(-1, 1, c("DA spring", "DA autumn","LA spring", "LA autumn"), pch=c(16,15,16,15), col=c("black", "black", "blue", "blue"), cex=0.8, bty="n", y.intersp = 0.75)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

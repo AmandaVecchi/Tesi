@@ -1,0 +1,49 @@
+######Diversity Indices######
+
+
+setwd("C:/LABTESI")
+getwd()
+
+#installing the required packages and loading them
+install.packages("entropy")
+install.packages("vegan")
+library(entropy)
+library(vegan) #require(vegan) will also work
+
+#importing the table we will use for our calculations
+#Importing directly a .csv file. We are telling R to read the table as a data frame (matrix). 
+#Using the "read.csv" function to import the table and stating which is the separator for each column and row (;)
+#row.names argument takes the column number of the data file from which to take the row names
+ForamBellocchio <- as.data.frame(read.csv("ForamsBellocchio.csv", sep = ";", row.names=1))
+
+# Let's transpose the table because vegan works with rows (the original one could be useful for other analyses)
+tForamBellocchio <- t(ForamBellocchio)
+tForamBellocchio <- as.data.frame(tForamBellocchio)
+
+## Let's compute the adjusted Chao and Shen (2003) version of the Shannon index
+#sapply() function takes list, vector or data frame as input and gives output in vector or matrix
+#Specify we want to calculate the entropy with the adjusted Chan and Shen formula
+Hbc_Bell <- sapply(tForamBellocchio, entropy.ChaoShen)
+Hbc_Bell #visualize the result
+
+#The Exponential is used to assess environmental quality
+exp(Hbc_Bell)
+
+## Now let's compute the classical Shannon Index
+Shannon_Bell <- diversity(ForamBellocchio, index = "shannon")
+Shannon_Bell
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

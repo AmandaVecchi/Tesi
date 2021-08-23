@@ -33,6 +33,9 @@ exp(Hbc_Bell)
 Shannon_Bell <- diversity(ForamBellocchio, index = "shannon")
 Shannon_Bell
 
+##Download in .cvs the two tables
+write.table(exp(Hbc_Bell), file="H'bc.csv", quote=F, sep=";", dec=",", na="", row.names=T, col.names=T)
+write.table(Shannon_Bell, file="ShannonBell.csv", quote=F, sep=";", dec=",", na="", row.names=T, col.names=T)
 
 
 

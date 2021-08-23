@@ -37,6 +37,9 @@ Shannon_Bell
 write.table(exp(Hbc_Bell), file="H'bc.csv", quote=F, sep=";", dec=",", na="", row.names=T, col.names=T)
 write.table(Shannon_Bell, file="ShannonBell.csv", quote=F, sep=";", dec=",", na="", row.names=T, col.names=T)
 
+Samples_Bell <- as.numeric(rownames(ForamBellocchio))
+plot(Samples_Bell ~ Hbc_Bell, type="l", bty="o", pch=16, xlab="H'bc", ylab="Sample name", lwd=1, xlim=c(0,15))
+axis(1, at=c(3, 7, 11, 15), lty=1, las=0)
 
 
 

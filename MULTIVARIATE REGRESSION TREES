@@ -1,15 +1,16 @@
 ##### MULTIVARIATE REGRESSION TREES
 
 install.packages("devtools")
-install.packages("c:/mvpart_1.6-2.tar.gz", repos=NULL, type="source")
+devtools::install_github("cran/mvpart") #Packages are not available on R anymore. Downoadng from GitHub directly
+devtools::install_github("cran/MVPARTwrap")
 install.packages("labdsv")
 install.packages("fBasics")
-install.packages("c:/LABTESI/MVPARTwrap_0.1-9.2.tar.gz", repos=NULL, type="source")
 
+library(devtools)
 library(mvpart)
-library(ladbsv)
-library(fBasics)
 library(MVPARTwrap)
+library(labdsv)
+library(fBasics)
 
 setwd("C:/LABTESI/")
 getwd()
@@ -27,11 +28,9 @@ Foram.mv<-mvpart(data.matrix(Foram.sp_rq)~., Foram.env, xv="pick") #apply mvpart
 #xv -> Selection of tree by cross-validation: "1se" - gives best tree within one SE of
 #the overall best, "min" - the best tree, "pick" - pick the tree size interactively,
 #"none" - no cross-validation
-
 #If argument xv="pick" has been used, which we recommend, one left-clicks
 #on the point representing the desired number of groups. A tree is then drawn
 
-#MULTIVARIATE REGRESSION TREE
 resF<-MRT(Foram.mv)
 
 #Extracting the clustering value
@@ -39,6 +38,8 @@ clu.MRT.Foram<-resF$obj$where
 data.frame(clu.MRT.Foram)
 row.Foram<-row.names(Foram.sp)
 clu.MRT.Foram.df<-data.frame(cluster=clu.MRT.Foram, row.names = row.Foram)
+
+
 
 ##### nMDS ORDINATION
 install.packages("ggplot2")
